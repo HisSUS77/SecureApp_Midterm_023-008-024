@@ -9,25 +9,19 @@ const Login = () => {
   const router = useRouter();
 
   const handleLogin = async () => {
+    setError(null);
     try {
-      const response = await fetch("/api/admin");
-      if (!response.ok) {
-        throw new Error("Failed to fetch admin data");
-      }
-
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
       const data = await response.json();
-      const adminData = data.data;
-
-      const isAuthenticated = adminData.some(
-        (admin) => admin.user === username && admin.pass === password
-      );
-
-      if (isAuthenticated) {
-        
-        router.push("/"); 
+      if (data.success) {
+        router.push("/dashboard");
       } else {
-        setError("Incorrect username or password");
-      }
+        setError(data.error || "Incorrect username or password");
+      }
     } catch (err) {
       console.error(err);
       setError("Failed to login. Please try again.");
