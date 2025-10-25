@@ -23,7 +23,7 @@ export default function Upload() {
       const result = await response.json();
       if (result.success) {
         setMessage("Project uploaded successfully!");
-        router.push("/"); 
+        router.push("/dashboard"); 
         
         // Reset the form fields
         setTitle("");
